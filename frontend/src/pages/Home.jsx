@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { getWeatherTheme } from "../utils/weatherTheme";
 
 import {
   getWeather,
@@ -27,6 +28,8 @@ function Home() {
 
   // Error State
   const [error, setError] = useState("");
+
+  const backgroundTheme = getWeatherTheme(weather?.weather);
 
   // Search by City
   const fetchWeather = async (city) => {
@@ -105,7 +108,9 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700">
+    <div
+  className={`min-h-screen bg-gradient-to-br ${backgroundTheme} transition-all duration-1000`}
+>
       <Navbar />
 
       <main className="flex flex-col items-center px-4 py-10">
@@ -183,7 +188,7 @@ function Home() {
           transition={{ duration: 0.8 }}
           className="mt-14 w-full max-w-6xl"
         >
-          <Highlights />
+          <Highlights weather={weather} />
         </motion.div>
 
         {/* Footer */}

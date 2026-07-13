@@ -3,12 +3,37 @@ import HighlightCard from "./HighlightCard";
 import {
   WiSunrise,
   WiSunset,
-  WiDaySunny,
+  WiHumidity,
+  WiStrongWind,
 } from "react-icons/wi";
 
-import { FaLeaf } from "react-icons/fa";
+function Highlights({ weather }) {
+  if (!weather) {
+    return (
+      <div id="highlights" className="mt-14">
+        <h2 className="text-white text-4xl font-bold mb-8">
+          Today's Highlights
+        </h2>
 
-function Highlights() {
+        <div className="bg-white/20 backdrop-blur-xl rounded-3xl p-8 text-center">
+          <p className="text-white/80 text-lg">
+            Search for a city to view today's highlights.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const sunrise = new Date(weather.sunrise).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const sunset = new Date(weather.sunset).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   return (
     <div id="highlights" className="mt-14">
 
@@ -21,29 +46,29 @@ function Highlights() {
         <HighlightCard
           icon={<WiSunrise className="text-yellow-300" />}
           title="Sunrise"
-          value="06:02 AM"
-          subtitle="Morning begins"
+          value={sunrise}
+          subtitle="Sun rises"
         />
 
         <HighlightCard
           icon={<WiSunset className="text-orange-400" />}
           title="Sunset"
-          value="06:54 PM"
-          subtitle="Evening ends"
+          value={sunset}
+          subtitle="Sun sets"
         />
 
         <HighlightCard
-          icon={<WiDaySunny className="text-yellow-300" />}
-          title="UV Index"
-          value="5"
-          subtitle="Moderate"
+          icon={<WiHumidity className="text-blue-300" />}
+          title="Humidity"
+          value={`${weather.humidity}%`}
+          subtitle="Current humidity"
         />
 
         <HighlightCard
-          icon={<FaLeaf className="text-green-400" />}
-          title="Air Quality"
-          value="Good"
-          subtitle="AQI 42"
+          icon={<WiStrongWind className="text-cyan-300" />}
+          title="Wind Speed"
+          value={`${weather.windSpeed} m/s`}
+          subtitle="Current wind"
         />
 
       </div>
