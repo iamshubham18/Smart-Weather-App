@@ -1,9 +1,19 @@
 const axios = require("axios");
 
-const getWeather = async (city) => {
-  const apiKey = process.env.OPENWEATHER_API_KEY;
+const apiKey = process.env.OPENWEATHER_API_KEY;
 
+// Search weather by city
+const getWeather = async (city) => {
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  const response = await axios.get(url);
+
+  return response.data;
+};
+
+// Search weather by latitude & longitude
+const getWeatherByLocation = async (lat, lon) => {
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
 
   const response = await axios.get(url);
 
@@ -12,4 +22,5 @@ const getWeather = async (city) => {
 
 module.exports = {
   getWeather,
+  getWeatherByLocation,
 };

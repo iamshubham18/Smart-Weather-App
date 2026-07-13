@@ -1,59 +1,35 @@
 import ForecastCard from "./ForecastCard";
-import { WiDaySunny, WiCloud, WiRain } from "react-icons/wi";
 
-function Forecast() {
+function Forecast({ forecast }) {
   return (
     <div id="forecast" className="mt-10">
 
       <h2 className="text-white text-3xl font-bold mb-6">
-        7-Day Forecast
+        5-Day Forecast
       </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-5">
+      {forecast.length === 0 ? (
+        <div className="bg-white/20 backdrop-blur-xl rounded-3xl p-8 text-center">
+          <p className="text-white/80 text-lg">
+            Search for a city to view the forecast.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
 
-        <ForecastCard
-          day="Mon"
-          icon={<WiDaySunny className="text-yellow-300" />}
-          temp="30°C"
-        />
+          {forecast.map((day, index) => (
+            <ForecastCard
+              key={index}
+              day={day.day}
+              temperature={day.temperature}
+              weather={day.weather}
+              description={day.description}
+              icon={day.icon}
+            />
+          ))}
 
-        <ForecastCard
-          day="Tue"
-          icon={<WiRain className="text-blue-300" />}
-          temp="27°C"
-        />
-
-        <ForecastCard
-          day="Wed"
-          icon={<WiCloud className="text-gray-300" />}
-          temp="29°C"
-        />
-
-        <ForecastCard
-          day="Thu"
-          icon={<WiDaySunny className="text-yellow-300" />}
-          temp="31°C"
-        />
-
-        <ForecastCard
-          day="Fri"
-          icon={<WiCloud className="text-gray-300" />}
-          temp="28°C"
-        />
-
-        <ForecastCard
-          day="Sat"
-          icon={<WiRain className="text-blue-300" />}
-          temp="26°C"
-        />
-
-        <ForecastCard
-          day="Sun"
-          icon={<WiDaySunny className="text-yellow-300" />}
-          temp="32°C"
-        />
-
-      </div>
+        </div>
+      )}
 
     </div>
   );
