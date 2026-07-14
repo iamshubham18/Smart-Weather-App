@@ -1,5 +1,4 @@
 import {
-  WiDaySunny,
   WiHumidity,
   WiStrongWind,
   WiBarometer,
@@ -8,6 +7,9 @@ import {
 import { MdVisibility } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
 import { FiThermometer } from "react-icons/fi";
+
+import { getWeatherIcon } from "../utils/weatherIcon";
+import { motion } from "framer-motion";
 
 import WeatherStat from "./WeatherStat";
 
@@ -32,26 +34,41 @@ function WeatherCard({ weather }) {
 
   return (
     <div className="bg-white/20 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-10">
-
       <div className="grid md:grid-cols-2 gap-10 items-center">
 
         {/* Left Side */}
         <div className="text-center">
 
-          <WiDaySunny className="text-yellow-300 text-9xl mx-auto drop-shadow-lg" />
+          <motion.div
+            animate={{
+              y: [0, -8, 0],
+              rotate:
+                weather.weather === "Clear"
+                  ? [0, 5, -5, 0]
+                  : 0,
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            {getWeatherIcon(
+              weather.weather,
+              "text-yellow-300 text-9xl mx-auto drop-shadow-lg"
+            )}
+          </motion.div>
 
           <h1 className="text-white text-7xl font-bold mt-2">
             {Math.round(weather.temperature)}°C
           </h1>
 
           <div className="flex justify-center items-center gap-2 mt-4">
-
             <FaLocationDot className="text-red-400 text-xl" />
 
             <h2 className="text-white text-3xl font-semibold">
               {weather.city}
             </h2>
-
           </div>
 
           <p className="text-white/80 text-xl mt-2 capitalize">
@@ -63,13 +80,11 @@ function WeatherCard({ weather }) {
           </p>
 
           <div className="flex justify-center items-center gap-2 mt-4">
-
             <FiThermometer className="text-yellow-300 text-xl" />
 
             <span className="text-white">
               Feels Like {Math.round(weather.feelsLike)}°C
             </span>
-
           </div>
 
         </div>
@@ -92,7 +107,7 @@ function WeatherCard({ weather }) {
           <WeatherStat
             icon={<MdVisibility />}
             title="Visibility"
-            value="10 km"
+            value={`${weather.visibility / 1000} km`}
           />
 
           <WeatherStat
@@ -104,7 +119,6 @@ function WeatherCard({ weather }) {
         </div>
 
       </div>
-
     </div>
   );
 }

@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
+
 import { getWeatherTheme } from "../utils/weatherTheme";
+import { getWeatherBackground } from "../utils/weatherBackground";
 
 import {
   getWeather,
@@ -15,6 +17,7 @@ import WeatherCard from "../components/WeatherCard";
 import Forecast from "../components/Forecast";
 import Highlights from "../components/Highlights";
 import Footer from "../components/Footer";
+import SkeletonCard from "../components/SkeletonCard";
 
 function Home() {
   // Weather Data
@@ -29,7 +32,11 @@ function Home() {
   // Error State
   const [error, setError] = useState("");
 
+  // Auto Scroll Reference
+  const weatherCardRef = useRef(null);
+
   const backgroundTheme = getWeatherTheme(weather?.weather);
+  const backgroundImage = getWeatherBackground(weather?.weather);
 
   // Search by City
   const fetchWeather = async (city) => {
@@ -42,6 +49,14 @@ function Home() {
 
       setWeather(weatherData);
       setForecast(forecastData);
+
+      // Auto Scroll
+      setTimeout(() => {
+        weatherCardRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 200);
 
       return weatherData;
     } catch (error) {
@@ -89,6 +104,14 @@ function Home() {
 
           setWeather(weatherData);
           setForecast(forecastData);
+
+          // Auto Scroll
+          setTimeout(() => {
+            weatherCardRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }, 200);
         } catch (error) {
           console.error(error);
 
@@ -109,11 +132,22 @@ function Home() {
 
   return (
     <div
-  className={`min-h-screen bg-gradient-to-br ${backgroundTheme} transition-all duration-1000`}
->
+      className={`min-h-screen bg-gradient-to-br ${backgroundTheme} transition-all duration-1000`}
+      style={{
+        backgroundImage: `
+          linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+          url(${backgroundImage})
+        `,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <Navbar />
 
       <main className="flex flex-col items-center px-4 py-10">
+
         {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: -50 }}
@@ -160,13 +194,18 @@ function Home() {
 
         {/* Weather Card */}
         <motion.div
+          ref={weatherCardRef}
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
           className="mt-10 w-full max-w-5xl"
         >
-          <WeatherCard weather={weather} />
+          {loading ? (
+            <SkeletonCard />
+          ) : (
+            <WeatherCard weather={weather} />
+          )}
         </motion.div>
 
         {/* Forecast */}
@@ -201,6 +240,7 @@ function Home() {
         >
           <Footer />
         </motion.div>
+
       </main>
     </div>
   );
