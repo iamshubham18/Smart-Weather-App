@@ -1,10 +1,9 @@
 import axios from "axios";
 
-const WEATHER_URL =
-  "const API_URL = import.meta.env.VITE_API_URL;";
+const API_URL = import.meta.env.VITE_API_URL;
 
-const FORECAST_URL =
-  "const API_URL = import.meta.env.VITE_API_URL;";
+const WEATHER_URL = `${API_URL}/api/weather`;
+const FORECAST_URL = `${API_URL}/api/forecast`;
 
 // Get current weather by city
 export const getWeather = async (city) => {
