@@ -35,7 +35,7 @@ function Footer() {
 
           {/* GitHub */}
           <a
-            href="#https://github.com/saamya2006/Weather-Apps.git"
+            href="https://github.com/iamshubham18/Smart-Weather-App.git"
             className="flex items-center gap-2 text-white hover:text-yellow-300 transition duration-300"
           >
             <FaGithub className="text-xl" />

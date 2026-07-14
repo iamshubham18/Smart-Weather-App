@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const WEATHER_URL =
-  "https://smart-weather-app-penm.onrender.com/api/weather";
+  "const API_URL = import.meta.env.VITE_API_URL;";
 
 const FORECAST_URL =
-  "https://smart-weather-app-penm.onrender.com/api/forecast";
+  "const API_URL = import.meta.env.VITE_API_URL;";
 
 // Get current weather by city
 export const getWeather = async (city) => {
