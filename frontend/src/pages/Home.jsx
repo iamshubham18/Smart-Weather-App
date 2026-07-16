@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import { getWeatherTheme } from "../utils/weatherTheme";
 import { getWeatherBackground } from "../utils/weatherBackground";
-
+import BackgroundLayer from "../components/BackgroundLayer";
 import AnimatedBackground from "../components/AnimatedBackground";
 
 import {
@@ -124,18 +124,20 @@ function Home() {
 
   return (
     <div
-      className={`relative min-h-screen overflow-hidden bg-gradient-to-br ${backgroundTheme} transition-all duration-1000`}
-      style={{
-        backgroundImage: `
-          linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-          url(${backgroundImage})
-        `,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundAttachment: "fixed",
-      }}
-    >
+  className={`relative min-h-screen overflow-hidden bg-gradient-to-br ${backgroundTheme} transition-colors duration-1000`}
+>
+  <BackgroundLayer image={backgroundImage} />
+
+  <AnimatedBackground />
+
+  <div className="relative z-10">
+    <Navbar />
+
+    <main className="flex flex-col items-center px-4 py-12">
+      {/* Your content */}
+    </main>
+  </div>
+    
       {/* Animated Background */}
       <AnimatedBackground />
 
