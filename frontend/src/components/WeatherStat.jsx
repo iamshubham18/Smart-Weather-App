@@ -1,33 +1,57 @@
+import { motion } from "framer-motion";
+
 function WeatherStat({ icon, title, value }) {
   return (
-    <div className="
-      bg-white/10
-      backdrop-blur-md
-      border
-      border-white/20
-      rounded-2xl
-      p-6
-      text-center
-      shadow-lg
-      hover:scale-105
-      hover:bg-white/20
-      transition-all
-      duration-300
-    ">
+    <motion.div
+      whileHover={{
+        y: -6,
+        scale: 1.03,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 250,
+        damping: 18,
+      }}
+      className="
+        group
+        relative
+        overflow-hidden
+        rounded-3xl
+        border border-white/15
+        bg-white/10
+        backdrop-blur-xl
+        p-6
+        text-center
+        shadow-xl
+        transition-all
+        duration-300
+        hover:bg-white/15
+        hover:border-cyan-300/40
+      "
+    >
+      {/* Glow */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-br from-cyan-400/10 via-transparent to-sky-500/10"></div>
 
-      <div className="text-5xl text-white flex justify-center mb-3">
-        {icon}
+      <div className="relative z-10">
+
+        <motion.div
+          whileHover={{ rotate: 8, scale: 1.15 }}
+          transition={{ type: "spring" }}
+          className="flex justify-center mb-4 text-5xl text-cyan-200"
+        >
+          {icon}
+        </motion.div>
+
+        <p className="text-sm uppercase tracking-wider text-white/65">
+          {title}
+        </p>
+
+        <h2 className="mt-2 text-3xl font-bold text-white">
+          {value}
+        </h2>
+
       </div>
-
-      <p className="text-white/70">
-        {title}
-      </p>
-
-      <h2 className="text-3xl text-white font-bold mt-2">
-        {value}
-      </h2>
-
-    </div>
+    </motion.div>
   );
 }
 

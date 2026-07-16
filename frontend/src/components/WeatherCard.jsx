@@ -8,12 +8,14 @@ import { MdVisibility } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
 import { FiThermometer } from "react-icons/fi";
 
-import { getWeatherIcon } from "../utils/weatherIcon";
 import { motion } from "framer-motion";
 
+import { getWeatherIcon } from "../utils/weatherIcon";
 import WeatherStat from "./WeatherStat";
 
 function WeatherCard({ weather }) {
+  if (!weather) return null;
+
   const currentDate = new Date();
 
   const formattedDate = currentDate.toLocaleDateString("en-US", {
@@ -27,69 +29,104 @@ function WeatherCard({ weather }) {
     minute: "2-digit",
   });
 
-  // Don't show card until weather is available
-  if (!weather) {
-    return null;
-  }
+  const glow = {
+    Clear: "shadow-yellow-300/30",
+    Clouds: "shadow-cyan-300/30",
+    Rain: "shadow-blue-400/30",
+    Drizzle: "shadow-blue-400/30",
+    Thunderstorm: "shadow-purple-500/30",
+    Snow: "shadow-white/30",
+    Mist: "shadow-slate-300/30",
+  };
 
   return (
-    <div className="bg-white/20 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-10">
-      <div className="grid md:grid-cols-2 gap-10 items-center">
+    <motion.div
+      animate={{ y: [0, -6, 0] }}
+      transition={{
+        duration: 5,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+      whileHover={{ scale: 1.01 }}
+      className={`
+        relative
+        overflow-hidden
+        rounded-[32px]
+        border border-white/20
+        bg-white/10
+        backdrop-blur-2xl
+        p-10
+        shadow-2xl
+        ${glow[weather.weather] || "shadow-cyan-300/20"}
+      `}
+    >
+      {/* Glass Shine */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
 
-        {/* Left Side */}
+      <div className="relative grid md:grid-cols-2 gap-12 items-center">
+
+        {/* Left */}
         <div className="text-center">
 
           <motion.div
             animate={{
-              y: [0, -8, 0],
+              y: [0, -10, 0],
               rotate:
                 weather.weather === "Clear"
-                  ? [0, 5, -5, 0]
+                  ? [0, 6, -6, 0]
                   : 0,
             }}
             transition={{
-              duration: 3,
+              duration: 4,
               repeat: Infinity,
-              ease: "easeInOut",
             }}
           >
             {getWeatherIcon(
               weather.weather,
-              "text-yellow-300 text-9xl mx-auto drop-shadow-lg"
+              "mx-auto text-[9rem] text-yellow-300 drop-shadow-2xl"
             )}
           </motion.div>
 
-          <h1 className="text-white text-7xl font-bold mt-2">
-            {Math.round(weather.temperature)}°C
-          </h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mt-2 text-7xl font-black text-white"
+          >
+            {Math.round(weather.temperature)}°
+          </motion.h1>
 
-          <div className="flex justify-center items-center gap-2 mt-4">
-            <FaLocationDot className="text-red-400 text-xl" />
+          <div className="mt-5 flex items-center justify-center gap-2">
+            <FaLocationDot className="text-xl text-red-400" />
 
-            <h2 className="text-white text-3xl font-semibold">
+            <h2 className="text-3xl font-semibold text-white">
               {weather.city}
             </h2>
           </div>
 
-          <p className="text-white/80 text-xl mt-2 capitalize">
+          <p className="mt-3 text-xl capitalize text-white/80">
             {weather.description}
           </p>
 
-          <p className="text-white/70 mt-2">
-            {formattedDate} • {formattedTime}
+          <p className="mt-3 text-white/60">
+            {formattedDate}
           </p>
 
-          <div className="flex justify-center items-center gap-2 mt-4">
-            <FiThermometer className="text-yellow-300 text-xl" />
+          <p className="text-white/60">
+            {formattedTime}
+          </p>
+
+          <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3">
+            <FiThermometer className="text-xl text-yellow-300" />
 
             <span className="text-white">
-              Feels Like {Math.round(weather.feelsLike)}°C
+              Feels like <b>{Math.round(weather.feelsLike)}°C</b>
             </span>
           </div>
 
         </div>
 
-        {/* Right Side */}
+        {/* Right */}
         <div className="grid grid-cols-2 gap-5">
 
           <WeatherStat
@@ -119,7 +156,7 @@ function WeatherCard({ weather }) {
         </div>
 
       </div>
-    </div>
+    </motion.div>
   );
 }
 

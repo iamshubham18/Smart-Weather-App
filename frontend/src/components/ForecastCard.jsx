@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 function ForecastCard({
   day,
   temperature,
@@ -6,43 +8,65 @@ function ForecastCard({
   icon,
 }) {
   return (
-    <div
+    <motion.div
+      whileHover={{
+        y: -8,
+        scale: 1.03,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 18,
+      }}
       className="
-        bg-white/20
-        backdrop-blur-xl
-        border
-        border-white/20
-        rounded-2xl
-        p-5
+        group
+        relative
+        overflow-hidden
+        rounded-3xl
+        border border-white/15
+        bg-white/10
+        backdrop-blur-2xl
+        p-6
         text-center
-        shadow-lg
-        hover:scale-105
-        transition-all
-        duration-300
+        shadow-xl
       "
     >
-      <h3 className="text-white text-lg font-semibold">
-        {day}
-      </h3>
+      {/* Glow */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-transparent to-blue-500/10 opacity-0 group-hover:opacity-100 transition duration-500" />
 
-      <img
-        src={`https://openweathermap.org/img/wn/${icon}@2x.png`}
-        alt={description}
-        className="mx-auto w-20 h-20"
-      />
+      <div className="relative z-10">
 
-      <p className="text-white text-2xl font-bold">
-        {temperature}°C
-      </p>
+        <h3 className="text-lg font-semibold tracking-wide text-white">
+          {day}
+        </h3>
 
-      <p className="text-white/90 mt-2 font-medium">
-        {weather}
-      </p>
+        <motion.img
+          whileHover={{
+            scale: 1.15,
+            rotate: 8,
+          }}
+          transition={{
+            type: "spring",
+          }}
+          src={`https://openweathermap.org/img/wn/${icon}@4x.png`}
+          alt={description}
+          className="mx-auto h-24 w-24 drop-shadow-xl"
+        />
 
-      <p className="text-white/70 text-sm capitalize mt-1">
-        {description}
-      </p>
-    </div>
+        <h2 className="text-4xl font-black text-white">
+          {Math.round(temperature)}°
+        </h2>
+
+        <p className="mt-2 text-lg font-semibold text-cyan-200">
+          {weather}
+        </p>
+
+        <p className="mt-1 text-sm capitalize text-white/70">
+          {description}
+        </p>
+
+      </div>
+    </motion.div>
   );
 }
 
