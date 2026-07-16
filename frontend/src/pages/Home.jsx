@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { getWeatherTheme } from "../utils/weatherTheme";
 import { getWeatherBackground } from "../utils/weatherBackground";
 
+import AnimatedBackground from "../components/AnimatedBackground";
+
 import {
   getWeather,
   getWeatherByLocation,
@@ -20,25 +22,17 @@ import Footer from "../components/Footer";
 import SkeletonCard from "../components/SkeletonCard";
 
 function Home() {
-  // Weather Data
   const [weather, setWeather] = useState(null);
-
-  // Forecast Data
   const [forecast, setForecast] = useState([]);
-
-  // Loading State
   const [loading, setLoading] = useState(false);
-
-  // Error State
   const [error, setError] = useState("");
 
-  // Auto Scroll Reference
   const weatherCardRef = useRef(null);
 
   const backgroundTheme = getWeatherTheme(weather?.weather);
   const backgroundImage = getWeatherBackground(weather?.weather);
 
-  // Search by City
+  // Search by city
   const fetchWeather = async (city) => {
     try {
       setLoading(true);
@@ -50,7 +44,6 @@ function Home() {
       setWeather(weatherData);
       setForecast(forecastData);
 
-      // Auto Scroll
       setTimeout(() => {
         weatherCardRef.current?.scrollIntoView({
           behavior: "smooth",
@@ -77,10 +70,10 @@ function Home() {
     }
   };
 
-  // Search by Current Location
+  // Search using current location
   const fetchCurrentLocationWeather = () => {
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser.");
+      setError("Geolocation is not supported.");
       return;
     }
 
@@ -105,7 +98,6 @@ function Home() {
           setWeather(weatherData);
           setForecast(forecastData);
 
-          // Auto Scroll
           setTimeout(() => {
             weatherCardRef.current?.scrollIntoView({
               behavior: "smooth",
@@ -132,10 +124,10 @@ function Home() {
 
   return (
     <div
-      className={`min-h-screen bg-gradient-to-br ${backgroundTheme} transition-all duration-1000`}
+      className={`relative min-h-screen overflow-hidden bg-gradient-to-br ${backgroundTheme} transition-all duration-1000`}
       style={{
         backgroundImage: `
-          linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+          linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
           url(${backgroundImage})
         `,
         backgroundSize: "cover",
@@ -144,104 +136,116 @@ function Home() {
         backgroundAttachment: "fixed",
       }}
     >
-      <Navbar />
+      {/* Animated Background */}
+      <AnimatedBackground />
 
-      <main className="flex flex-col items-center px-4 py-10">
+      {/* Page Content */}
+      <div className="relative z-10">
+        <Navbar />
 
-        {/* Hero */}
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center"
-        >
-          <h1 className="text-5xl md:text-6xl font-bold text-white">
-            🌤 Smart Weather App
-          </h1>
+        <main className="flex flex-col items-center px-4 py-12">
 
-          <p className="text-white/90 mt-3 text-lg">
-            Real-Time Weather Information
-          </p>
-        </motion.div>
-
-        {/* Search */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mt-10 w-full max-w-md"
-        >
-          <SearchBox
-            onSearch={fetchWeather}
-            onLocationSearch={fetchCurrentLocationWeather}
-            loading={loading}
-          />
-        </motion.div>
-
-        {/* Error */}
-        {error && (
+          {/* Hero */}
           <motion.div
-            initial={{ opacity: 0, y: -15 }}
+            initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-6 w-full max-w-md rounded-2xl bg-red-500/20 border border-red-300 backdrop-blur-xl p-4 text-center"
+            transition={{ duration: 0.8 }}
+            className="text-center max-w-4xl"
           >
-            <p className="text-white font-medium">
-              ❌ {error}
+            <h1 className="text-5xl md:text-7xl font-black leading-tight text-white">
+              Know the{" "}
+              <span className="bg-gradient-to-r from-cyan-300 to-sky-400 bg-clip-text text-transparent">
+                Weather
+              </span>
+              <br />
+              Before You Step Outside
+            </h1>
+
+            <p className="mt-6 text-lg md:text-xl text-white/90">
+              Real-time weather forecasts, 5-day predictions, and location-based
+              updates—all in one beautiful dashboard.
             </p>
           </motion.div>
-        )}
 
-        {/* Weather Card */}
-        <motion.div
-          ref={weatherCardRef}
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mt-10 w-full max-w-5xl"
-        >
-          {loading ? (
-            <SkeletonCard />
-          ) : (
-            <WeatherCard weather={weather} />
+          {/* Search */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mt-12 w-full max-w-lg"
+          >
+            <SearchBox
+              onSearch={fetchWeather}
+              onLocationSearch={fetchCurrentLocationWeather}
+              loading={loading}
+            />
+          </motion.div>
+
+          {/* Error */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-6 w-full max-w-lg rounded-3xl border border-red-400/40 bg-red-500/20 backdrop-blur-xl p-4 text-center"
+            >
+              <p className="text-white font-semibold">
+                ❌ {error}
+              </p>
+            </motion.div>
           )}
-        </motion.div>
 
-        {/* Forecast */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mt-14 w-full max-w-6xl"
-        >
-          <Forecast forecast={forecast} />
-        </motion.div>
+          {/* Weather Card */}
+          <motion.div
+            ref={weatherCardRef}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mt-12 w-full max-w-5xl"
+          >
+            {loading ? (
+              <SkeletonCard />
+            ) : (
+              <WeatherCard weather={weather} />
+            )}
+          </motion.div>
 
-        {/* Highlights */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mt-14 w-full max-w-6xl"
-        >
-          <Highlights weather={weather} />
-        </motion.div>
+          {/* Forecast */}
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mt-16 w-full max-w-6xl"
+          >
+            <Forecast forecast={forecast} />
+          </motion.div>
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="w-full max-w-6xl px-4"
-        >
-          <Footer />
-        </motion.div>
+          {/* Highlights */}
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mt-16 w-full max-w-6xl"
+          >
+            <Highlights weather={weather} />
+          </motion.div>
 
-      </main>
+          {/* Footer */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="mt-16 w-full max-w-6xl px-4"
+          >
+            <Footer />
+          </motion.div>
+
+        </main>
+      </div>
     </div>
   );
 }
