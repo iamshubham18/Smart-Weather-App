@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export default function AnimatedBackground() {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-gradient-to-br from-slate-900 via-sky-900 to-blue-600">
+    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
 
       {/* Blob 1 */}
       <motion.div

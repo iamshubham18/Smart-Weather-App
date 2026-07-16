@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import { getWeatherTheme } from "../utils/weatherTheme";
 import { getWeatherBackground } from "../utils/weatherBackground";
-import BackgroundLayer from "../components/BackgroundLayer";
+// import BackgroundLayer from "../components/BackgroundLayer";
 import AnimatedBackground from "../components/AnimatedBackground";
 
 import {
@@ -31,6 +31,9 @@ function Home() {
 
   const backgroundTheme = getWeatherTheme(weather?.weather);
   const backgroundImage = getWeatherBackground(weather?.weather);
+  
+  console.log("Weather:", weather?.weather);
+console.log("Background:", backgroundImage);
 
   // Search by city
   const fetchWeather = async (city) => {
@@ -126,7 +129,12 @@ function Home() {
     <div
   className={`relative min-h-screen overflow-hidden bg-gradient-to-br ${backgroundTheme} transition-colors duration-1000`}
 >
-  <BackgroundLayer image={backgroundImage} />
+   <img
+  src={backgroundImage}
+  alt="Background"
+  className="fixed inset-0 w-full h-full object-cover z-0"
+/>
+<div className="fixed inset-0 bg-black/35 z-10"></div>
 
   
     
@@ -134,7 +142,7 @@ function Home() {
       <AnimatedBackground />
 
       {/* Page Content */}
-      <div className="relative z-10">
+      <div className="relative z-20">
         <Navbar />
 
         <main className="flex flex-col items-center px-4 py-12">
