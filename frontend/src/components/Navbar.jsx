@@ -1,75 +1,61 @@
-import { WiDaySunny } from "react-icons/wi";
+import { motion } from "framer-motion";
+import { FaCloudSun } from "react-icons/fa";
 
 function Navbar() {
   return (
-    <div className="w-full max-w-6xl mx-auto pt-5 px-4">
-
-      <nav
-        className="
-        flex
-        items-center
-        justify-between
-        rounded-2xl
-        bg-white/15
-        backdrop-blur-2xl
-        border
-        border-white/20
-        shadow-2xl
-        px-8
-        py-4
-        "
-      >
+    <motion.nav
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.7 }}
+      className="sticky top-5 z-50 px-4"
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/20 bg-white/10 px-6 py-4 backdrop-blur-xl shadow-2xl">
 
         {/* Logo */}
-
         <div className="flex items-center gap-3">
-
-          <WiDaySunny className="text-yellow-300 text-5xl" />
+          <FaCloudSun className="text-3xl text-yellow-300" />
 
           <div>
-
-            <h1 className="text-white text-xl font-bold">
-              Smart Weather
+            <h1 className="text-xl font-bold text-white">
+              Weatherly
             </h1>
 
-            <p className="text-white/70 text-sm">
-              Real-Time Forecast
+            <p className="text-xs text-white/70">
+              Live Forecast
             </p>
-
           </div>
-
         </div>
 
-        {/* Menu */}
-
+        {/* Navigation */}
         <div className="hidden md:flex items-center gap-8">
 
-          <a
-            href="#"
-            className="text-white/80 hover:text-white hover:scale-110 transition-all duration-300"
-          >
+          <button className="text-white/90 hover:text-cyan-300 transition">
             Home
-          </a>
+          </button>
 
-          <a
-            href="#forecast"
-            className="text-white/80 hover:text-white hover:scale-110 transition-all duration-300"
-          >
+          <button className="text-white/90 hover:text-cyan-300 transition">
             Forecast
-          </a>
+          </button>
 
-          <a
-            href="#highlights"
-            className="text-white/80 hover:text-white hover:scale-110 transition-all duration-300"
-          >
+          <button className="text-white/90 hover:text-cyan-300 transition">
             Highlights
-          </a>
+          </button>
 
         </div>
 
-      </nav>
+        {/* Status */}
+        <div className="hidden lg:flex items-center gap-2 rounded-full bg-white/10 px-4 py-2">
 
-    </div>
+          <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
+
+          <span className="text-sm text-white">
+            Live Weather
+          </span>
+
+        </div>
+
+      </div>
+    </motion.nav>
   );
 }
 

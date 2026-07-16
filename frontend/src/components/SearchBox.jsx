@@ -1,131 +1,64 @@
 import { useState } from "react";
-import Loading from "./Loading";
+import { motion } from "framer-motion";
+import { FaSearch, FaLocationArrow } from "react-icons/fa";
 
 function SearchBox({ onSearch, onLocationSearch, loading }) {
   const [city, setCity] = useState("");
 
-  const handleSearch = async () => {
-    if (city.trim() === "") return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!city.trim()) return;
 
     try {
       await onSearch(city);
-
-      // Clear input after successful search
-      setCity("");
     } catch {
-      // Home handles errors
-    }
-  };
-
-  const handleLocationSearch = () => {
-    onLocationSearch();
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
+      // Error handled in Home.jsx
     }
   };
 
   return (
-    <div className="bg-white/20 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8">
+    <motion.form
+      onSubmit={handleSubmit}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="space-y-5"
+    >
+      {/* Search Input */}
+      <div className="relative">
+        <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-white/60 text-lg" />
 
-      <label className="block text-white text-lg font-semibold mb-3">
-        Enter City
-      </label>
+        <input
+          type="text"
+          placeholder="Search any city..."
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          className="w-full rounded-full border border-white/20 bg-white/10 py-4 pl-14 pr-32 text-white placeholder-white/60 backdrop-blur-xl outline-none transition-all duration-300 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-400/40"
+        />
 
-      <input
-        type="text"
-        placeholder="Search for a city..."
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-        onKeyDown={handleKeyDown}
-        disabled={loading}
-        className="
-          w-full
-          px-5
-          py-4
-          rounded-2xl
-          bg-white/10
-          border
-          border-white/30
-          text-white
-          placeholder:text-white/60
-          outline-none
-          focus:ring-2
-          focus:ring-white/60
-          transition
-          disabled:opacity-50
-        "
-      />
+        <button
+          type="button"
+          onClick={onLocationSearch}
+          className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white transition hover:bg-white/20"
+        >
+          <FaLocationArrow />
+          <span className="hidden sm:inline">Location</span>
+        </button>
+      </div>
 
       {/* Search Button */}
-      <button
-        onClick={handleSearch}
+      <motion.button
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.96 }}
         disabled={loading}
-        className="
-          w-full
-          mt-6
-          py-4
-          rounded-2xl
-          bg-blue-600
-          text-white
-          text-lg
-          font-semibold
-          shadow-lg
-          hover:bg-blue-700
-          hover:scale-105
-          hover:shadow-xl
-          transition-all
-          duration-300
-          disabled:bg-blue-400
-          disabled:cursor-not-allowed
-          disabled:hover:scale-100
-          flex
-          justify-center
-          items-center
-          gap-2
-        "
+        type="submit"
+        className="w-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 py-4 text-lg font-semibold text-white shadow-xl transition hover:shadow-cyan-500/40 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {loading ? (
-          <>
-            <Loading />
-            Loading...
-          </>
-        ) : (
-          "🌎 Get Weather"
-        )}
-      </button>
-
-      {/* Current Location Button */}
-      <button
-        onClick={handleLocationSearch}
-        disabled={loading}
-        className="
-          w-full
-          mt-4
-          py-4
-          rounded-2xl
-          bg-green-600
-          text-white
-          text-lg
-          font-semibold
-          shadow-lg
-          hover:bg-green-700
-          hover:scale-105
-          hover:shadow-xl
-          transition-all
-          duration-300
-          disabled:bg-green-400
-          disabled:cursor-not-allowed
-          disabled:hover:scale-100
-        "
-      >
-        📍 Use My Location
-      </button>
-
-    </div>
+        {loading ? "Searching..." : "Search Weather"}
+      </motion.button>
+    </motion.form>
   );
 }
 
-export default SearchBox;4
+export default SearchBox;
