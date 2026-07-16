@@ -128,15 +128,7 @@ function Home() {
 >
   <BackgroundLayer image={backgroundImage} />
 
-  <AnimatedBackground />
-
-  <div className="relative z-10">
-    <Navbar />
-
-    <main className="flex flex-col items-center px-4 py-12">
-      {/* Your content */}
-    </main>
-  </div>
+  
     
       {/* Animated Background */}
       <AnimatedBackground />
