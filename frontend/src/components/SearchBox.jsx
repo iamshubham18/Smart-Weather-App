@@ -13,7 +13,7 @@ function SearchBox({ onSearch, onLocationSearch, loading }) {
     try {
       await onSearch(city);
     } catch {
-      // Error handled in Home.jsx
+      // Error handled in Home.jsx ok
     }
   };
 
